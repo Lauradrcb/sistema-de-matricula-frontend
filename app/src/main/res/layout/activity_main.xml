@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context="com.tcc.laura.sistemamatricula.frontend.MainActivity">
 
     <RelativeLayout
@@ -128,7 +129,7 @@
             android:layout_marginRight="55dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fazer cadastro" />
+            android:text="Fazer cadastro"/>
 
         <Button
             android:id="@+id/button_login_login"

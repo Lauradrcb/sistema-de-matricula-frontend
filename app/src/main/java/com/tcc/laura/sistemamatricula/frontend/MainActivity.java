@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText username_field;
     private EditText password_field;
     private String username;
+    private String user;
     private String password;
     private String baseUrl;
 
@@ -23,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO: Replace this with your own IP address or URL.
-        baseUrl = "http://192.168.178.78:8080/rest/users/login/";
+        // URL fixa utilizada para conexao com backend - temporariamente setada para rede local
+        baseUrl = "http://192.168.43.18:8080/rest/users/login/";
 
         username_field = (EditText) findViewById(R.id.editText_login_username);
         password_field = (EditText) findViewById(R.id.editText_login_password);
@@ -48,18 +49,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * This subclass handles the network operations in a new thread.
-     * It starts the progress bar, makes the API call, and ends the progress bar.
-     */
     public class ExecuteNetworkOperation extends AsyncTask<Void, Void, String> {
 
         private ApiAuthenticationClient apiAuthenticationClient;
         private String isValidCredentials;
 
-        /**
-         * Overload the constructor to pass objects to this class.
-         */
+        //Sobrecarga de construtor para permitir passagem de parametros
         public ExecuteNetworkOperation(ApiAuthenticationClient apiAuthenticationClient) {
             this.apiAuthenticationClient = apiAuthenticationClient;
         }
@@ -89,18 +84,21 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
             // Redireciona para a tela de usuario caso o Login seja bem sucedido
-            if (isValidCredentials.equals("granted")) {
+            if (isValidCredentials.contains("granted")) {
+                System.out.println(isValidCredentials.indexOf("user:"));// + 5 .length
+                user =  isValidCredentials.substring(isValidCredentials.indexOf("user:") + 5, isValidCredentials.length() - 1);
                 goToSecondActivity();
             }
-            else if(isValidCredentials.equals("notregistered")){
-                Toast.makeText(getApplicationContext(), "User not registered", Toast.LENGTH_LONG).show();
+            // Retorna mensagem de usuário nao cadastrado
+            else if(isValidCredentials.contains("notregistered")){
+                Toast.makeText(getApplicationContext(), "CPF não cadastrado", Toast.LENGTH_LONG).show();
             }
-            // Exibe mensagem de erro caso o login tenha falhado
-            else if(isValidCredentials.equals("wrong")){
-                Toast.makeText(getApplicationContext(), "Wrong credentials", Toast.LENGTH_LONG).show();
+            // Exibe mensagem de
+            else if(isValidCredentials.contains("wrong")){
+                Toast.makeText(getApplicationContext(), "Senha ou CPF incorreto", Toast.LENGTH_LONG).show();
             }
             else{
-                Toast.makeText(getApplicationContext(), "Generic Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Tempo limite esgotado", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -108,12 +106,9 @@ public class MainActivity extends AppCompatActivity {
     //Funcao que redireciona para a proxima tela
     private void goToSecondActivity() {
         Bundle bundle = new Bundle();
-        bundle.putString("username", username);
-        bundle.putString("password", password);
-        bundle.putString("baseUrl", baseUrl);
 
         Intent intent = new Intent(this, SecondActivity.class);
-        intent.putExtras(bundle);
+        intent.putExtra("username", user);
         startActivity(intent);
     }
 }
