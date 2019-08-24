@@ -75,6 +75,7 @@ public class ApiAuthenticationClient {
             //App preparada para eventual uso de codificacao
             String encoding = Base64Encoder.encode(username + ":" + password);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(10000);
             connection.setRequestMethod(httpMethod);
             connection.setRequestProperty("Authorization", "gzip, deflate");
             connection.setRequestProperty("Accept", "*/*");
@@ -128,8 +129,11 @@ public class ApiAuthenticationClient {
         else if((outputStringBuilder.toString()).contains("code:1")){
             return "notregistered";
         }
-        else{
+        else if((outputStringBuilder.toString()).contains("code:3")){
             return "wrong";
+        }
+        else{
+            return "timeout";
         }
     }
 }
