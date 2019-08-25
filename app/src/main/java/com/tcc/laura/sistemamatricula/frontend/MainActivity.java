@@ -39,11 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
                 username = username_field.getText().toString();
                 password = password_field.getText().toString();
-
-                ApiAuthenticationClient apiAuthenticationClient = new ApiAuthenticationClient(baseUrl, username, password);
-                apiAuthenticationClient.setHttpMethod("POST");
-                AsyncTask<Void, Void, String> execute = new ExecuteNetworkOperation(apiAuthenticationClient);
-                execute.execute();
+                if(username.length() != 0 || password.length() != 0){
+                    ApiAuthenticationClient apiAuthenticationClient = new ApiAuthenticationClient(baseUrl, username, password);
+                    apiAuthenticationClient.setHttpMethod("POST");
+                    AsyncTask<Void, Void, String> execute = new ExecuteNetworkOperation(apiAuthenticationClient);
+                    execute.execute();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "CPF ou senha em branco", Toast.LENGTH_LONG).show();
+                }
             } catch (Exception ex) {}
             }
         });
@@ -95,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             }
             // Exibe mensagem de
             else if(isValidCredentials.contains("wrong")){
-                Toast.makeText(getApplicationContext(), "Senha ou CPF incorreto", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Senha Incorreta", Toast.LENGTH_LONG).show();
             }
             else{
                 Toast.makeText(getApplicationContext(), "Tempo limite esgotado", Toast.LENGTH_LONG).show();

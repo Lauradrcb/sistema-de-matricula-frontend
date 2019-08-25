@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LoginRestApi</string>
+    <string name="disciplinas"><u>Nenhuma Disciplina encontrada</u></string>
 </resources>

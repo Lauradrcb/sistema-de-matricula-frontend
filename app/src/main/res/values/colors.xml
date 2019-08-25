@@ -9,4 +9,6 @@
     <color name="colorRowSeparator">#cccccc</color>
     <color name="filterBackground">#cccccc</color>
     <color name="filterText">#3366cc</color>
+    <color name="border">#C0CCDA</color>
+
 </resources>
